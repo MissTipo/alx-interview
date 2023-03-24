@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 '''generates pascal's triangle of n rows'''
 
 
