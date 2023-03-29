@@ -1,9 +1,4 @@
-'''
-n = number of boxes = length of array = len(boxes)
-unlocked = [0]
-
-'''
-#!/usr/bin/python3
+!/usr/bin/python3
 """Lockboxes"""
 def canUnlockAll(boxes):
     """Determines if all the boxes can be opened"""
