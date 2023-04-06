@@ -1,5 +1,18 @@
 #!/usr/bin/python3
 '''Minimum Operations'''
+import math
+
+
+def is_prime(n):
+    """
+    Helper function to determine whether a number is prime
+    """
+    if n < 2:
+        return False
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if n % i == 0:
+            return False
+    return True
 
 
 def minOperations(n):
