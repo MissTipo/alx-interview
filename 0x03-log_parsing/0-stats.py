@@ -1,47 +1,43 @@
 #!/usr/bin/python3
-""" script that reads stdin line by line and computes metrics """
+"""
+A script that reads stdin line by line and computes metrics
+steps:
+read from stdin
+for line in stdin, check if format is , else skip
+declare a counter variable that increments, check if the counter is 10,
+calculate
+declare a dict for storing the status codes {ststus code}
+declare a variable to store the file size
+every time a line is read, check if key is availale in dict
+update file size
+print file size
+if !key || !value, continue
+else print status code
+"""
 
-if __name__ == '__main__':
+import sys
 
-    import sys
 
-    def print_results(statusCodes, fileSize):
-        """ Print statistics """
-        print("File size: {:d}".format(fileSize))
-        for statusCode, times in sorted(statusCodes.items()):
-            if times:
-                print("{:s}: {:d}".format(statusCode, times))
+status_dict = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0,404: 0,  405: 0, 500: 0}
+stdin = sys.stdin
+counter = 0
+total_file_size = 0
 
-    statusCodes = {"200": 0,
-                   "301": 0,
-                   "400": 0,
-                   "401": 0,
-                   "403": 0,
-                   "404": 0,
-                   "405": 0,
-                   "500": 0
-                   }
-    fileSize = 0
-    n_lines = 0
-
-    try:
-        """ Read stdin line by line """
-        for line in sys.stdin:
-            if n_lines != 0 and n_lines % 10 == 0:
-                """ After every 10 lines, print from the beginning """
-                print_results(statusCodes, fileSize)
-            n_lines += 1
-            data = line.split()
-            try:
-                """ Compute metrics """
-                statusCode = data[-2]
-                if statusCode in statusCodes:
-                    statusCodes[statusCode] += 1
-                fileSize += int(data[-1])
-            except:
-                pass
-        print_results(statusCodes, fileSize)
-    except KeyboardInterrupt:
-        """ Keyboard interruption, print from the beginning """
-        print_results(statusCodes, fileSize)
-        raise
+try:
+    for line in stdin:
+        output = line.split()
+        if int(output[-2]) in status_dict.keys() and len(output) == 9:
+            counter += 1
+            status_dict[int(output[-2])] += 1
+            total_file_size += int(output[-1])
+        if counter % 10 == 0:
+            print('File size: {}'.format(total_file_size))
+            for key, value in status_dict.items():
+                if value:
+                    print("{}: {}".format(key, value))
+except KeyboardInterrupt:
+    print('File size: {}'.format(total_file_size))
+    for key, value in status_dict.items():
+        if value:
+            print("{}: {}".format(key, value))
+    raise
