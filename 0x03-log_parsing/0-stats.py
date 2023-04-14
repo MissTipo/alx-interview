@@ -14,7 +14,6 @@ if !key || !value, continue
 else print status code
 """
 
-import re
 import sys
 
 
@@ -35,7 +34,9 @@ try:
             for key, value in status_dict.items():
                 if value:
                     print("{}: {}".format(key, value))
-except KeyboardInterrupt as error:
+except KeyboardInterrupt:
     print('File size: {}'.format(total_file_size))
     for key, value in status_dict.items():
-        print("{}: {}".format(key, value))
+        if value:
+            print("{}: {}".format(key, value))
+    raise
