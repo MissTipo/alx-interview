@@ -18,7 +18,7 @@ else print status code
 import sys
 
 
-status_dict = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 405: 0, 500: 0}
+status_dict = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0,404: 0,  405: 0, 500: 0}
 stdin = sys.stdin
 counter = 0
 total_file_size = 0
