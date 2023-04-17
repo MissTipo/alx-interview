@@ -1,43 +1,50 @@
 #!/usr/bin/python3
 """
 A script that reads stdin line by line and computes metrics
-steps:
-read from stdin
-for line in stdin, check if format is , else skip
-declare a counter variable that increments, check if the counter is 10,
-calculate
-declare a dict for storing the status codes {ststus code}
-declare a variable to store the file size
-every time a line is read, check if key is availale in dict
-update file size
-print file size
-if !key || !value, continue
-else print status code
 """
 
 import sys
 
 
-status_dict = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0,404: 0,  405: 0, 500: 0}
-stdin = sys.stdin
-counter = 0
-total_file_size = 0
+def parse_log():
+    count = 0
+    fileSize = 0
+    pStatusCode = [200, 301, 400, 401, 403, 404, 405, 500]
+    statusCodeOccurence = {}
 
-try:
-    for line in stdin:
-        output = line.split()
-        if int(output[-2]) in status_dict.keys() and len(output) == 9:
-            counter += 1
-            status_dict[int(output[-2])] += 1
-            total_file_size += int(output[-1])
-        if counter % 10 == 0:
-            print('File size: {}'.format(total_file_size))
-            for key, value in status_dict.items():
-                if value:
-                    print("{}: {}".format(key, value))
-except KeyboardInterrupt:
-    print('File size: {}'.format(total_file_size))
-    for key, value in status_dict.items():
-        if value:
-            print("{}: {}".format(key, value))
-    raise
+    try:
+        for line in sys.stdin:
+            each = line.split()
+            if len(each) < 2:
+                continue
+            try:
+                count += 1
+                fileSize += int(each[-1:][0])
+                statusCode = int(each[-2:][0])
+                if statusCode in pStatusCode:
+                    if statusCode in statusCodeOccurence:
+                        statusCodeOccurence[statusCode] += 1
+                    else:
+                        statusCodeOccurence[statusCode] = 1
+
+                if count == 10:
+                    count = 0
+                    print_error(fileSize, statusCodeOccurence)
+            except ValueError:
+                continue
+        # if count > 0:
+            # print('Here')
+        print_error(fileSize, statusCodeOccurence)
+    except KeyboardInterrupt:
+        print_error(fileSize, statusCodeOccurence)
+        raise
+
+
+def print_error(fileSize, statusCodeOccurence):
+    print('File size: {}'.format(fileSize))
+    for items in sorted(statusCodeOccurence.items()):
+        print('{}: {}'.format(items[0], items[1]))
+
+
+if __name__ == '__main__':
+    parse_log()
