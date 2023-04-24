@@ -34,7 +34,11 @@ def validUTF8(data):
             else:
                 return False
 
-        else:
+        for i in range(1, num_bytes+1):
+            current_byte_index = data.index(byte) + i
+            if current_byte_index >= len(data):
+                return False
+            byte = data[current_byte_index]
             if (byte & 0b11000000) != 0b10000000:
                 return False
             byte_num -= 1
