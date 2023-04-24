@@ -33,7 +33,7 @@ def validUTF8(data):
                 byte_num = 3
             else:
                 return false
-            
+
         else:
             if (byte & 0b11000000) != 0b10000000:
                 return False
