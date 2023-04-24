@@ -19,22 +19,23 @@ then the data is a valid UTF-8 encoding
 
 
 def validUTF8(data):
-    """etermines if a given data set represents a valid UTF-8 encoding"""
+    """Determines if a given data set represents a valid UTF-8 encoding"""
     byte_num = 0
     for byte in data:
-        if (byte & 0b10000000) == 0b00000000:
-            byte_num = 0
-        elif (byte & 0b11100000) == 0b11000000:
-            byte_num = 1
-        elif (byte & 0b11110000) == 0b11100000:
-            byte_num = 2
-        elif (byte & 0b11111000) == 0b11110000:
-            byte_num = 3
+        if byte_num == 0:
+            if (byte & 0b10000000) == 0b00000000:
+                byte_num = 0
+            elif (byte & 0b11100000) == 0b11000000:
+                byte_num = 1
+            elif (byte & 0b11110000) == 0b11100000:
+                byte_num = 2
+            elif (byte & 0b11111000) == 0b11110000:
+                byte_num = 3
+            else:
+                return false
+            
         else:
-            return false
-
-        for i in range(1, byte_num + 1):
-            if (data[min(len(data) - 1, data.index(byte) + i)]
-                    & 0b11000000) != 0b10000000:
+            if (byte & 0b11000000) != 0b10000000:
                 return False
+            byte_num -= 1
     return True
