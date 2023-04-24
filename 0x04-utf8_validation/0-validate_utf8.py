@@ -32,7 +32,7 @@ def validUTF8(data):
             elif (byte & 0b11111000) == 0b11110000:
                 byte_num = 3
             else:
-                return false
+                return False
 
         else:
             if (byte & 0b11000000) != 0b10000000:
