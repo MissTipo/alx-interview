@@ -40,6 +40,7 @@ def is_safe(board, row, column):
 
 
 def nqueens(board, row):
+    """Solve the nqueens"""
     n = len(board)
     if row == n:
         print(' '.join(board[i]) for i in range(n))
@@ -49,6 +50,7 @@ def nqueens(board, row):
             board[row][col] = "Q"
             nqueens(board, row + 1)
             board[row][col] = "."
+
+
 board = [["."] * N for _ in range(N)]
 nqueens(board, 0)
-
