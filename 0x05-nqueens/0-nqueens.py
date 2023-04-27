@@ -8,11 +8,11 @@ if len(sys.argv) != 2:
     sys.exit(1)
 
 N = sys.argv[1]
-if N is not isinstance(int):
+if N is not isinstance(N, int):
     print('N must be a number')
     sys.exit(1)
 
-if N < 4:
+if int(N) < 4:
     print('N must be at least 4')
     sys.exit(1)
 
