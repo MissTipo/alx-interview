@@ -2,6 +2,7 @@
 """N queens"""
 import sys
 
+
 # Check if the number of arguments is correct
 if len(sys.argv) != 2:
     print("Usage: nqueens N")
