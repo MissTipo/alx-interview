@@ -1,76 +1,56 @@
 #!/usr/bin/python3
-"""N queens"""
 import sys
 
 
-# Check if the number of arguments is correct
-if len(sys.argv) != 2:
-    print("Usage: nqueens N")
-    sys.exit(1)
+def nqueens(n: int):
+    """
+    backtracking
+    """
+    def backtrack(row, queens, diagonals, anti_diagonals, board):
+        if row == n:
+            # found a valid solution
+            print([[i, j] for i, j in queens])
+            return
 
-# Check if N is a number
-try:
-    n = int(sys.argv[1])
-except ValueError:
-    print("N must be a number")
-    sys.exit(1)
+        for col in range(n):
+            # check if it is safe to place a queen in this position
+            if col not in board and row - \
+                    col not in diagonals and row + col not in anti_diagonals:
+                board.add(col)
+                diagonals.add(row - col)
+                anti_diagonals.add(row + col)
+                queens.append((row, col))
 
-# Check if N is at least 4
-if n < 4:
-    print("N must be at least 4")
-    sys.exit(1)
+                backtrack(row + 1, queens, diagonals, anti_diagonals, board)
 
-# Check if N is even and at least 6
-if n % 2 == 0 and n < 6:
-    print("N must be at least 6 if it is even")
-    sys.exit(1)
+                board.remove(col)
+                diagonals.remove(row - col)
+                anti_diagonals.remove(row + col)
+                queens.pop()
 
-# Check if N is odd and at least 5
-if n % 2 == 1 and n < 5:
-    print("N must be at least 5 if it is odd")
-    sys.exit(1)
+    board = set()
+    queens = []
+    diagonals = set()
+    anti_diagonals = set()
 
+    backtrack(0, queens, diagonals, anti_diagonals, board)
 
-# A helper function to check if a queen can be placed in a given position
-def is_valid(board, row, col):
-    """check if a queen can be placed in a given position"""
-    n = len(board)
-    # Check if there is already a queen in the same column
-    for i in range(n):
-        if board[i][col] == "Q":
-            return False
-    # Check if there is already a queen in the same row
-    for j in range(n):
-        if board[row][j] == "Q":
-            return False
-    # Check if there is already a queen in the same diagonal
-    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
-        if board[i][j] == "Q":
-            return False
-    for i, j in zip(range(row, n, 1), range(col, -1, -1)):
-        if board[i][j] == "Q":
-            return False
-    return True
-
-# A recursive function to solve the N Queens problem
-def solve(board, row):
-    """ solve the N Queens problem"""
-    n = len(board)
-    # Base case: all queens have been placed
-    if row == n:
-        print(" ".join(board[i]) for i in range(n))
-        return
-    # Try to place a queen in each column of the current row
-    for col in range(n):
-        if is_valid(board, row, col):
-            board[row][col] = "Q"
-            solve(board, row + 1)
-            board[row][col] = "."
+    if not queens:
+        print("No solution found for {}-queens.".format(n))
 
 
-# Initialize the board
-board = [["."] * n for _ in range(n)]
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: nqueens N")
+        exit(1)
 
-# Call the solve function with the initial board and the first row
-solve(board, 0)
+    try:
+        n = int(sys.argv[1])
+        if n < 4:
+            print("N must be at least 4")
+            exit(1)
+    except ValueError:
+        print("N must be a number")
+        exit(1)
 
+    nqueens(n)
