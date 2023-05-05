@@ -1,22 +1,32 @@
-import request from 'request-promise';
+#!/usr/bin/node
 
-const printCharacters = async (movieId) => {
-  const movieUrl = 'https://swapi-api.alx-tools.com/api/films/${movieId}/';
-  try {
-    const movieData = await request.get(movieUr);
-    const characterUrls = JSON.parse(movieData).characters
-
-    const characterPromises = characterUrls.map((url) => request.get(url));
-    const characterResponse = await Promise.all(characterPromises);
-
-    const characters = characterResponses.map((response) => JSON.parse(response))
-    characters.forEach((character) => console.log(character.name));
-  } catch (error) {
-    console.error('Error retrieving character data: ${error}');
+function order (characters, idx) {
+  if (idx >= characters.length) {
+    return;
   }
-};
+  request(characters[idx], function (err, response, body) {
+    if (err) {
+      console.log(err);
+    } else if (response.statusCode === 200) {
+      const person = JSON.parse(body);
+      console.log(person.name);
+      return order(characters, ++idx);
+    } else {
+      console.log('error ocurred, Status code: ' + response.statusCode);
+    }
+  });
+}
 
-const movieId = process.argv[2];
-printCharacters(movieId);
-
-
+const request = require('request');
+const url = 'https://swapi-api.hbtn.io/api/films/';
+const ep = process.argv[2];
+request(url + ep, function (err, response, body) {
+  if (err) {
+    console.log(err);
+  } else if (response.statusCode === 200) {
+    const jsobj = JSON.parse(body);
+    order(jsobj.characters, 0);
+  } else {
+    console.log('error ocurred, Status code: ' + response.statusCode);
+  }
+});
