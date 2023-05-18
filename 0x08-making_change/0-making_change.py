@@ -41,12 +41,12 @@ def makeChange(coins, total):
     counter = 0
     if total <= 0:
         return 0
-    if min(coins) > total:
+    """if min(coins) > total:
         return -1
     if sum(coins) == total:
         return len(coins)
     if total in coins:
-        return 1
+        return 1"""
     sort = sorted(coins, reverse=True)
     # for number in sort:
     for i in range(len(sort)):
