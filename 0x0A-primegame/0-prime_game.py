@@ -13,8 +13,10 @@ def is_prime(num):
     """Check for primality."""
     if num < 2:
         return False
+    if num == 2:
+        return True
     if num >= 3:
-        for i in range(2, num // 2):
+        for i in range(2, num // 2 + 1):
             if num % i == 0:
                 return False
     return True
